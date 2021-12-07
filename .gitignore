@@ -2,7 +2,7 @@
 /build
 *.txt
 *.properties
-/nbproject/private
+/nbproject/private/
 
 # Compiled class file
 *.class
