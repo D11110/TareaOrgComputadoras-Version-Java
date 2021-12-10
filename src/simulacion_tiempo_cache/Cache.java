@@ -1,18 +1,21 @@
 package simulacion_tiempo_cache;
 
 public class Cache {
-    
-    //Los 3 arreglos separados son como la metada por decirlo de alguna manera
 
+    //Los 3 arreglos separados son como la metada por decirlo de alguna manera
     private boolean validar[] = new boolean[8];
     private boolean mod[] = new boolean[8];
     private int etiqueta[] = new int[8];
-    
-    //La matriz de valores es donde vamos almacenando los datos de la RAM
 
+    //La matriz de valores es donde vamos almacenando los datos de la RAM
     private int valores[][] = new int[8][8];
 
     public Cache() {
+        for (int i = 0; i < 8; i++) {
+            this.etiqueta[i] = i;
+            this.validar[i] = false;
+            this.mod[i] = false;
+        }
     }
 
     public Cache(boolean[] validar, boolean[] mod, int[] etiqueta, int[][] valores) {

@@ -10,6 +10,7 @@ public class Simulacion_Tiempo_Cache {
 
     static RAM ram = new RAM();
     static ArrayList<Integer> datosEnRam = new ArrayList<>();
+    static int numeros[] = new int[4096];
     static Cache cache = new Cache();
     static boolean filaValidar[] = cache.getValidar();
     static int filaEtiqueta[] = cache.getEtiqueta();
@@ -25,7 +26,7 @@ public class Simulacion_Tiempo_Cache {
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File("C:\\Users\\Juda\\Desktop\\TareaOrgComputadoras-Version-Java\\datos.txt");
+            archivo = new File("./datos.txt");
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
@@ -33,7 +34,9 @@ public class Simulacion_Tiempo_Cache {
             String enArchivo;
             while ((enArchivo = br.readLine()) != null) {
                 //  System.out.println(enArchivo);
-                datosEnRam.add(Integer.parseInt(enArchivo));
+                int i = 0;
+                numeros[i] = Integer.parseInt(enArchivo);
+                i++;
             }
         } catch (IOException | NumberFormatException e) {
         } finally {
@@ -47,7 +50,7 @@ public class Simulacion_Tiempo_Cache {
         }
 
 //        for (int i = 0; i < datosEnRam.size(); i++) {
-//          //  System.out.println(datosEnRam.get(i));
+//            System.out.println(datosEnRam.get(i));
 //        }
         int n = 4096;
         for (int i = 0; i <= n - 2; i++) {
@@ -68,12 +71,12 @@ public class Simulacion_Tiempo_Cache {
         int bloque = posicion / 8;
         int linea = bloque % 8;
         int palabra = posicion % 8;
-        if (filaValidar[etiqueta]) {
+        if (filaValidar[linea]) {
             if (filaEtiqueta[linea] == etiqueta) {
                 dato = datos[linea][palabra];
                 tiempo += 0.01;
             } else if (filaMod[linea]) {
-                for (int i = (filaEtiqueta[linea] * 64) + (linea * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
+                for (int i = (filaEtiqueta[linea] * 64), j = 0; i <= (filaEtiqueta[linea] * 64) + 7; i++, j++) {
                     datosEnRam.add(datos[linea][j]);
                 }
                 for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
