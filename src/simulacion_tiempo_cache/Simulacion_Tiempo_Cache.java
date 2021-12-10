@@ -52,7 +52,7 @@ public class Simulacion_Tiempo_Cache {
 //        for (int i = 0; i < datosEnRam.size(); i++) {
 //            System.out.println(datosEnRam.get(i));
 //        }
-        int n = 4096;
+        int n = 5;
         for (int i = 0; i <= n - 2; i++) {
             for (int j = i + 1; j <= n - 1; j++) {
                 if (leer(i) > leer(j)) {
@@ -62,6 +62,7 @@ public class Simulacion_Tiempo_Cache {
                 }
             }
         }
+        System.out.println("Tiempo total transcurrido es de: " + tiempo);
 
     }
 
@@ -77,17 +78,20 @@ public class Simulacion_Tiempo_Cache {
                 tiempo += 0.01;
             } else if (filaMod[linea]) {
                 for (int i = (filaEtiqueta[linea] * 64), j = 0; i <= (filaEtiqueta[linea] * 64) + 7; i++, j++) {
-                    datosEnRam.add(datos[linea][j]);
+                    //  datosEnRam.add(datos[linea][j]);
+                    numeros[i] = datos[linea][j];
                 }
+
                 for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                    datos[linea][j] = datosEnRam.get(i);
+                    // datos[linea][j] = datosEnRam.get(i);
+                    datos[linea][j] = numeros[i];
                 }
                 dato = datos[linea][palabra];
                 filaMod[linea] = false;
                 tiempo += 0.11;
             } else {
                 for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                    datos[linea][j] = datosEnRam.get(i);
+                    datos[linea][j] = numeros[i];
                 }
                 dato = datos[linea][palabra];
                 filaMod[linea] = false;
@@ -96,7 +100,7 @@ public class Simulacion_Tiempo_Cache {
         } else {
             filaValidar[linea] = true;
             for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                datos[linea][j] = datosEnRam.get(i);
+                datos[linea][j] = numeros[i];
             }
             dato = datos[linea][palabra];
             tiempo += 0.11;
@@ -110,40 +114,49 @@ public class Simulacion_Tiempo_Cache {
         int bloque = indice / 8;
         int linea = bloque % 8;
         int palabra = indice % 8;
-        if (filaValidar[etiqueta]) {
+        if (filaValidar[linea]) {
             if (filaEtiqueta[linea] == etiqueta) {
                 datos[linea][palabra] = valor;
                 dato = datos[linea][palabra];
                 filaMod[linea] = true;
+                tiempo += 0.01;
             }
             if (filaMod[linea]) {
-                for (int i = (filaEtiqueta[linea] * 64) + (linea * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                    datosEnRam.add(datos[linea][j]);
+                for (int i = (filaEtiqueta[linea] * 64), j = 0; i <= (filaEtiqueta[linea] * 64) + 7; i++, j++) {
+                    //  datosEnRam.add(datos[linea][j]);
+                    numeros[i] = datos[linea][j];
                 }
                 for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                    datos[linea][j] = datosEnRam.get(i);
+                    // datos[linea][j] = datosEnRam.get(i);
+                    datos[linea][j] = numeros[i];
                 }
                 filaMod[linea] = true;
                 datos[linea][palabra] = valor;
                 dato = datos[linea][palabra];
+                
             }
             // transferir ram a la cache falta
             for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-                datos[linea][j] = datosEnRam.get(i);
+                // datos[linea][j] = datosEnRam.get(i);
+                datos[linea][j] = numeros[i];
             }
+
             filaMod[linea] = true;
             datos[linea][palabra] = valor;
             dato = datos[linea][palabra];
-
+           
         }
         //transferir ram a la cache
         for (int i = (bloque * 8), j = 0; i <= (bloque * 8) + 7; i++, j++) {
-            datos[linea][j] = datosEnRam.get(i);
+            // datos[linea][j] = datosEnRam.get(i);
+            datos[linea][j] = numeros[i];
         }
+        
         filaValidar[linea] = true;
         filaMod[linea] = true;
         datos[linea][palabra] = valor;
         dato = datos[linea][palabra];
+        
     }
 
 }
